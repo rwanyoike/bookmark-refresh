@@ -48,7 +48,10 @@ function updateNode(node, text) {
     }
     chrome.bookmarks.update(node.id, { title }, () => {
       saved += 1;
+      console.info('Updated:', node.id, node.url); // eslint-disable-line no-console
     });
+  } else {
+    console.warn('Skipped:', node.id, node.url); // eslint-disable-line no-console
   }
 }
 
@@ -81,6 +84,7 @@ function nextRequest() {
         nextRequest();
       }).catch(() => {
         errors += 1;
+        console.error('Failed:', node.id, node.url); // eslint-disable-line no-console
         nextRequest();
       });
   }
@@ -90,6 +94,7 @@ function startOrStop() { // eslint-disable-line no-unused-vars
   if (running) {
     running = false;
     pending = true;
+    console.log('%c%s STOPPED', 'font-weight: bold', chrome.i18n.getMessage('appName')); // eslint-disable-line no-console
     updatePopup();
   } else {
     chrome.storage.local.get(['appendMeta'], (items) => {
@@ -98,6 +103,7 @@ function startOrStop() { // eslint-disable-line no-unused-vars
     running = true;
     pending = false;
     chrome.browserAction.setBadgeText({ text: '↻' });
+    console.log('%c%s STARTED', 'font-weight: bold', chrome.i18n.getMessage('appName')); // eslint-disable-line no-console
     nextRequest();
   }
 }
