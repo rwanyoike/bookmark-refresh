@@ -1,0 +1,46 @@
+{
+  "appName": {
+    "message": "Bookmark Refresh",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "Update your bookmarks.",
+    "description": "The descriptions of the application"
+  },
+  "startWarning": {
+    "message": "Backup your bookmarks before starting.",
+    "description": "The start warning message"
+  },
+  "btnStartAction": {
+    "message": "Start",
+    "description": "The start action button"
+  },
+  "btnStopAction": {
+    "message": "Stop",
+    "description": "The stop action button"
+  },
+  "optAppendMeta": {
+    "message": "Append website description (<meta/>) to title",
+    "description": "The options append checkbox"
+  },
+  "bookmarksFound": {
+    "message": "$FOUND$ bookmarks found",
+    "description": "The bookmarks found label",
+    "placeholders": {
+      "found": {
+        "content": "$1",
+        "example": "66"
+      }
+    }
+  },
+  "bookmarksSaved": {
+    "message": "$SAVED$ updated",
+    "description": "The bookmarks saved label",
+    "placeholders": {
+      "saved": {
+        "content": "$1",
+        "example": "42"
+      }
+    }
+  }
+}

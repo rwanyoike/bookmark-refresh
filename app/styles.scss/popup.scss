@@ -1,0 +1,110 @@
+body {
+  width: 220px; // Width of Firefox's menu panel
+  text-align: center;
+}
+
+#button {
+  margin-bottom: 0.5rem;
+}
+
+.header {
+  background-color: #0275d8;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.content {
+  padding: .5rem 1rem;
+}
+
+.message {
+  background-color: #f7f7f7;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 0.5rem 1rem;
+}
+
+.btn {
+  border-radius: .25rem;
+  border: 1px solid transparent;
+  padding: .25rem 2rem;
+  transition: all .2s ease-in-out;
+  user-select: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(2, 117, 216, .25);
+  }
+
+  &:active {
+    background-image: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+  }
+}
+
+.btn-warning {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+
+  &:hover {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #eb9316;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(240, 173, 78, .5);
+  }
+
+  &:disabled {
+    background-color: #f0ad4e;
+    border-color: #f0ad4e;
+  }
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+
+  &:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #c12e2a;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(217, 83, 79, .5);
+  }
+
+  &:disabled {
+    background-color: #d9534f;
+    border-color: #d9534f;
+  }
+}
+
+.progress {
+  background-color: #eceeef;
+  border-radius: .25rem;
+  display: flex;
+  font-size: .75rem;
+  line-height: 1rem;
+  margin-bottom: .5rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.progress-bar {
+  background-color: #0275d8;
+  color: #fff;
+  height: 1rem;
+}

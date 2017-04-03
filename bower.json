@@ -1,0 +1,13 @@
+{
+  "name": "bookmark-refresh",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "bootstrap": "v4.0.0-alpha.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
