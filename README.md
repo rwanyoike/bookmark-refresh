@@ -2,7 +2,7 @@
 
 > Update your bookmarks
 
-This WebExtenstion lets you update your bookmarks, specifically your bookmark titles. It loads each bookmark location, picks the `<title/>`, and updates the bookmark. Useful when used with the [append website description](#append-website-description) option. Tested on Chrome and Firefox:
+Lets you update your bookmarks, specifically your bookmark titles. It loads each bookmark location, picks the `<title/>`, and updates the bookmark. Useful when used with the [append website description](#append-website-description) option. Tested on Chrome and Firefox:
 
 ![](screenshot.png)
 
@@ -29,9 +29,7 @@ Will have its title set to: _GoatGoatYo_.
 
 ### Append website description
 
-When set, the above becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us!)_.
-
-\*\* If you use the address bar to lookup bookmarks, typing _search engine_ will also suggest _GoatGoatYo_.
+When set, the above becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us!)_. If you use the address bar to lookup bookmarks, typing **search engine** will also suggest **GoatGoatYo**. 🐐
 
 ## Credits
 
