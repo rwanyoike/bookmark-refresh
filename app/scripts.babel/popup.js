@@ -12,10 +12,10 @@ elButton.addEventListener('click', () => {
 
 document.querySelectorAll('[data-i18n]').forEach((el) => {
   const message = el.getAttribute('data-i18n');
-  el.textContent = chrome.i18n.getMessage(message); // eslint-disable-line no-param-reassign
+  el.textContent = browser.i18n.getMessage(message); // eslint-disable-line no-param-reassign
 });
 
-chrome.runtime.getBackgroundPage((backgroundPage) => {
+browser.runtime.getBackgroundPage().then((backgroundPage) => {
   eventPage = backgroundPage;
   eventPage.els = { elButton, elProgressBar, elFound, elSaved };
   eventPage.updatePopup();

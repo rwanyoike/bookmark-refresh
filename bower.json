@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "dependencies": {
     "jquery": "^3.2.1",
-    "bootstrap": "v4.0.0-alpha.6"
+    "bootstrap": "v4.0.0-alpha.6",
+    "webextension-polyfill": "mozilla/webextension-polyfill#77af627d051e4a61273c65ef0272830feabbab45"
   },
   "devDependencies": {
     "chai": "^3.5.0",

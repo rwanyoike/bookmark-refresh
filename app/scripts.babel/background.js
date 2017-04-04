@@ -14,31 +14,35 @@ function updatePopup() {
   const progressWidth = (progress / bookmarks.length) * 100;
 
   if (running) {
-    els.elButton.classList = 'btn btn-danger';
-    els.elButton.textContent = chrome.i18n.getMessage('btnStopAction');
+    els.elButton.classList.add('btn-danger');
+    els.elButton.classList.remove('btn-warning');
+    els.elButton.textContent = browser.i18n.getMessage('btnStopAction');
   } else if (pending) {
     els.elButton.disabled = true;
-    els.elButton.classList = 'btn btn-danger';
-    els.elButton.textContent = chrome.i18n.getMessage('btnStopAction');
+    els.elButton.classList.add('btn-danger');
+    els.elButton.classList.remove('btn-warning');
+    els.elButton.textContent = browser.i18n.getMessage('btnStopAction');
   } else {
     els.elButton.disabled = false;
-    els.elButton.classList = 'btn btn-warning';
-    els.elButton.textContent = chrome.i18n.getMessage('btnStartAction');
+    els.elButton.classList.add('btn-warning');
+    els.elButton.classList.remove('btn-danger');
+    els.elButton.textContent = browser.i18n.getMessage('btnStartAction');
   }
 
   els.elProgressBar.style.width = `${progressWidth}%`;
   // elProgressBar.textContent = `${progress}/${bookmarks.length}`;
-  els.elFound.textContent = chrome.i18n.getMessage(
+  els.elFound.textContent = browser.i18n.getMessage(
     'bookmarksFound', [bookmarks.length]);
-  els.elSaved.textContent = chrome.i18n.getMessage(
+  els.elSaved.textContent = browser.i18n.getMessage(
     'bookmarksSaved', [saved]);
 }
 
 function updateNode(node, text) {
   const html = new DOMParser().parseFromString(text, 'text/html');
   const elTitle = html.querySelector('title');
+  const elMeta = html.querySelector('meta[name="description"]');
+
   if (elTitle) {
-    const elMeta = html.querySelector('meta[name="description"]');
     let title = elTitle.textContent.trim();
     if (appendMeta && elMeta) {
       const meta = elMeta.content.replace(/\r?\n|\r/g, ' ').trim();
@@ -46,12 +50,16 @@ function updateNode(node, text) {
         title = `${title} (${meta})`;
       }
     }
-    chrome.bookmarks.update(node.id, { title }, () => {
-      saved += 1;
-      console.info('Updated:', node.id, node.url); // eslint-disable-line no-console
-    });
+    if (node.title !== title) {
+      browser.bookmarks.update(node.id, { title }).then(() => {
+        saved += 1;
+        console.info('Updated:', node.id, node.url);
+      });
+    } else {
+      console.warn('Skipped:', node.id, node.url);
+    }
   } else {
-    console.warn('Skipped:', node.id, node.url); // eslint-disable-line no-console
+    console.warn('No <title/>:', node.id, node.url);
   }
 }
 
@@ -62,7 +70,7 @@ function nextRequest() {
 
   if (!running) {
     pending = false;
-    chrome.browserAction.setBadgeText({ text: '' });
+    browser.browserAction.setBadgeText({ text: '' });
     updatePopup();
   } else {
     updatePopup();
@@ -84,7 +92,7 @@ function nextRequest() {
         nextRequest();
       }).catch(() => {
         errors += 1;
-        console.error('Failed:', node.id, node.url); // eslint-disable-line no-console
+        console.error('Failed:', node.id, node.url);
         nextRequest();
       });
   }
@@ -94,16 +102,20 @@ function startOrStop() { // eslint-disable-line no-unused-vars
   if (running) {
     running = false;
     pending = true;
-    console.log('%c%s STOPPED', 'font-weight: bold', chrome.i18n.getMessage('appName')); // eslint-disable-line no-console
     updatePopup();
   } else {
-    chrome.storage.local.get(['appendMeta'], (items) => {
+    browser.storage.local.get(['appendMeta']).then((items) => {
       appendMeta = items.appendMeta;
     });
     running = true;
     pending = false;
-    chrome.browserAction.setBadgeText({ text: '↻' });
-    console.log('%c%s STARTED', 'font-weight: bold', chrome.i18n.getMessage('appName')); // eslint-disable-line no-console
+    browser.browserAction.setBadgeText({ text: '↻' });
+    if (!bookmarksQueue.length > 0) {
+      // Restart the progress
+      bookmarksQueue = bookmarks.slice();
+      saved = 0;
+      errors = 0;
+    }
     nextRequest();
   }
 }
@@ -112,15 +124,13 @@ function getTreeNodes(nodes) {
   nodes.forEach((node) => {
     if (node.title && node.url) {
       bookmarks.push(node);
-    }
-    if (node.children && node.children.length > 0) {
+    } else if (node.children && node.children.length > 0) {
       getTreeNodes(node.children);
     }
   });
 }
 
-chrome.bookmarks.getTree((nodes) => {
+browser.bookmarks.getTree().then((nodes) => {
   getTreeNodes(nodes);
   bookmarksQueue = bookmarks.slice();
 });
-

@@ -5,8 +5,8 @@
   <meta charset="utf-8">
 
   <!-- build:css styles/vendor.css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-reboot.css">
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css styles/popup.css -->
@@ -14,12 +14,14 @@
   <!-- endbuild -->
 </head>
 
-<body>
-  <div class="header" data-i18n="appName"></div>
-  <div class="message" data-i18n="startWarning"></div>
-  <div class="content">
-    <button id="button" class="btn"></button>
-    <div class="progress">
+<body class="text-center">
+  <div class="navbar navbar-inverse bg-primary">
+    <span class="text-white" data-i18n="appName"></span>
+  </div>
+  <div class="message bg-faded px-3 py-2" data-i18n="startWarning"></div>
+  <div class="px-3 py-2">
+    <button id="button" class="btn btn-block mb-2"></button>
+    <div class="progress mb-2">
       <div id="progress-bar" class="progress-bar">
       </div>
     </div>
@@ -28,6 +30,7 @@
   </div>
 
   <!-- build:js scripts/vendor.js -->
+  <script src="scripts/browser-polyfill.js"></script>
   <!-- bower:js -->
   <!-- endbower -->
   <!-- endbuild -->

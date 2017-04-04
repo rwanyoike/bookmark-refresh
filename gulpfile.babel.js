@@ -112,7 +112,7 @@ gulp.task('babel', () => {
     .pipe(gulp.dest('app/scripts'));
 });
 
-gulp.task('clean', del.bind(null, ['.tmp', 'dist', 'app/scripts', 'app/styles']));
+gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('watch', ['lint', 'babel'], () => {
   $.livereload.listen();
