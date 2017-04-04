@@ -1,8 +1,9 @@
-// generated on 2017-03-24 using generator-chrome-extension 0.6.1
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
+import uglifyjs from 'uglify-js-harmony';
+import minifier from 'gulp-uglify/minifier';
 import {
   stream as wiredep
 } from 'wiredep';
@@ -72,7 +73,7 @@ gulp.task('html', ['styles'], () => {
       searchPath: ['.tmp', 'app', '.']
     }))
     .pipe($.sourcemaps.init())
-    .pipe($.if('*.js', $.uglify()))
+    .pipe($.if('*.js', minifier({}, uglifyjs)))
     .pipe($.if('*.css', $.cleanCss({
       compatibility: '*'
     })))
@@ -87,7 +88,7 @@ gulp.task('html', ['styles'], () => {
 gulp.task('chromeManifest', () => {
   return gulp.src('app/manifest.json')
     .pipe($.chromeManifest({
-      buildnumber: true,
+      buildnumber: false,
       background: {
         target: 'scripts/background.js',
         exclude: [
@@ -99,16 +100,14 @@ gulp.task('chromeManifest', () => {
       compatibility: '*'
     })))
     .pipe($.if('*.js', $.sourcemaps.init()))
-    .pipe($.if('*.js', $.uglify()))
+    .pipe($.if('*.js', minifier({}, uglifyjs)))
     .pipe($.if('*.js', $.sourcemaps.write('.')))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('babel', () => {
   return gulp.src('app/scripts.babel/**/*.js')
-    .pipe($.babel({
-      presets: ['es2015']
-    }))
+    .pipe($.babel())
     .pipe(gulp.dest('app/scripts'));
 });
 
