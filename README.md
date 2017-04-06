@@ -1,12 +1,26 @@
 # Bookmark Refresh
 
-> Update your bookmarks
+> Update your bookmarks.
 
-Lets you update your bookmarks, specifically your bookmark titles. It loads each bookmark location, picks the `<title/>`, and updates the bookmark. Useful when used with the [append website description](#append-website-description) option. Tested on Chrome and Firefox:
+**Bookmark Refresh** lets you update your bookmarks [with website descriptions](#options). Useful when searching -- typing part of a website description recommends the bookmark.
+
+Tested on Chrome 57+ and Firefox 51+.
 
 ![](screenshot.png)
 
-For example, this bookmark location:
+Icon created by [IconDots](https://thenounproject.com/IconDots/) from the [Noun Project](https://thenounproject.com).
+
+## Installation
+
+To install **Bookmark Refresh**, download the [latest release](https://github.com/rwanyoike/bookmark-refresh/releases) and load it as an _unpacked_ (Chrome) or _temporary_ (Firefox) extension.
+
+## Usage
+
+> **Backup your bookmarks!**
+
+Open the extenstion and click **Start**. It will proceed to load your bookmarks and start the update.
+
+For example, this bookmark's page:
 
 ```html
 <!DOCTYPE html>
@@ -18,24 +32,27 @@ For example, this bookmark location:
   tracks you. We don't protect your search history from anyone – even us!">
 </head>
 
-<body>...</body>
-
-</html>
+...
 ```
 
 Will have its title set to: _GoatGoatYo_.
 
-## Options
+### Options
 
-### Append website description
+#### Append Website Description
 
-When set, the above becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us!)_. If you use the address bar to lookup bookmarks, typing **search engine** will also suggest **GoatGoatYo**. 🐐
+When set, the above title becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us!)_. 🐐
 
-## Credits
+## Maintainers
 
-- Scaffolded using [`yo`](https://github.com/yeoman/yo) [`chrome-extension --sass`](https://github.com/yeoman/generator-chrome-extension).
-- Icon created by [IconDots](https://thenounproject.com/IconDots/) from the [Noun Project](https://thenounproject.com).
+- [@rwanyoike](https://github.com/rwanyoike)
+
+## Contribute
+
+Feel free to dive in. [Open an issue](https://github.com/rwanyoike/bookmark-refresh/issues/new) or submit a PR.
+
+**Bookmark Refresh** follows the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
 
 ## License
 
-MIT © Raymond Wanyoike
+[MIT](LICENSE) © Raymond Wanyoike
