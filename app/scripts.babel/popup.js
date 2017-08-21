@@ -3,12 +3,6 @@
 const elButton = document.getElementById('button');
 const elProgressBar = document.getElementById('progress-bar');
 const elFound = document.getElementById('found');
-const elSaved = document.getElementById('saved');
-let eventPage = null;
-
-elButton.addEventListener('click', () => {
-  eventPage.startOrStop();
-});
 
 document.querySelectorAll('[data-i18n]').forEach((el) => {
   const message = el.getAttribute('data-i18n');
@@ -16,7 +10,10 @@ document.querySelectorAll('[data-i18n]').forEach((el) => {
 });
 
 browser.runtime.getBackgroundPage().then((backgroundPage) => {
-  eventPage = backgroundPage;
-  eventPage.els = { elButton, elProgressBar, elFound, elSaved };
-  eventPage.updatePopup();
+  const eventPage = backgroundPage;
+  eventPage.popup = { elButton, elProgressBar, elFound };
+  eventPage.updatePopupHtml();
+  elButton.addEventListener('click', () => {
+    eventPage.startStopAction();
+  });
 });

@@ -2,7 +2,7 @@
 
 > Update your bookmarks.
 
-**Bookmark Refresh** lets you update your bookmarks [with website descriptions](#options). Useful when searching -- typing part of a website description recommends the bookmark.
+**Bookmark Refresh** allows you to **overwrite** your bookmarks [with website descriptions](#options). This is useful when doing searches or using the address bar -- typing part of a website's description recommends the bookmark.
 
 Tested on Chrome 57+ and Firefox 51+.
 
@@ -16,11 +16,11 @@ To install **Bookmark Refresh**, download the [latest release](https://github.co
 
 ## Usage
 
-> **Backup your bookmarks!**
+**Remember to make a backup of your bookmarks!**
 
-Open the extenstion and click **Start**. It will proceed to load your bookmarks and start the update.
+Open the extension and click **Start**. It will proceed to load your bookmarks and start the update.
 
-For example, this bookmark's page:
+For example, a bookmark pointing to this page:
 
 ```html
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ For example, this bookmark's page:
 <head>
   <title>GoatGoatYo</title>
   <meta name="description" content="GoatGoatYo is the search engine that
-  tracks you. We don't protect your search history from anyone – even us!">
+  tracks you. We don't protect your search history from anyone – even us! 🐐">
 </head>
 
 ...
@@ -39,9 +39,18 @@ Will have its title set to: _GoatGoatYo_.
 
 ### Options
 
-#### Append Website Description
+#### Append website description <meta/> to title (default: True)
 
-When set, the above title becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us!)_. 🐐
+When set, the above title becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us! 🐐)_.
+
+Descriptions are found in this order:
+
+|    |                     |                                          |
+|----|---------------------|------------------------------------------|
+| 1. | Meta                | `<meta name="description" ...>`          |
+| 2. | Google+ / Schema    | `<meta itemprop="description" ...>`      |
+| 3. | Facebook Open Graph | `<meta property="og:description" ...>`   |
+| 4. | Twitter Cards       | `<meta name="twitter:description" ...>`  |
 
 ## Maintainers
 

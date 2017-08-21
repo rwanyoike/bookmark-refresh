@@ -4,11 +4,11 @@
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "Update your bookmarks.",
+    "message": "Update your 💼 bookmarks with website descriptions.",
     "description": "The descriptions of the application"
   },
   "startWarning": {
-    "message": "Backup your bookmarks before starting.",
+    "message": "Remember to always make a backup ⛑.",
     "description": "The start warning message"
   },
   "btnStartAction": {
@@ -19,8 +19,8 @@
     "message": "Stop",
     "description": "The stop action button"
   },
-  "optAppendMeta": {
-    "message": "Append website description (<meta/>) to title",
+  "optAppendDesc": {
+    "message": "Append website description <meta/> to title",
     "description": "The options append checkbox"
   },
   "bookmarksFound": {

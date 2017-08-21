@@ -2,13 +2,14 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
-import uglifyjs from 'uglify-js-harmony';
-import minifier from 'gulp-uglify/minifier';
+import uglifyjs from 'uglify-es'
+import composer from 'gulp-uglify/composer'
 import {
   stream as wiredep
 } from 'wiredep';
 
 const $ = gulpLoadPlugins();
+const minify = composer(uglifyjs, console);
 
 gulp.task('extras', () => {
   return gulp.src([
@@ -73,7 +74,7 @@ gulp.task('html', ['styles'], () => {
       searchPath: ['.tmp', 'app', '.']
     }))
     .pipe($.sourcemaps.init())
-    .pipe($.if('*.js', minifier({}, uglifyjs)))
+    .pipe($.if('*.js', minify({})))
     .pipe($.if('*.css', $.cleanCss({
       compatibility: '*'
     })))
@@ -100,7 +101,7 @@ gulp.task('chromeManifest', () => {
       compatibility: '*'
     })))
     .pipe($.if('*.js', $.sourcemaps.init()))
-    .pipe($.if('*.js', minifier({}, uglifyjs)))
+    .pipe($.if('*.js', minify({})))
     .pipe($.if('*.js', $.sourcemaps.write('.')))
     .pipe(gulp.dest('dist'));
 });
