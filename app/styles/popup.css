@@ -1,0 +1,10 @@
+body {
+  width: 15em;
+  /* Workaround premature sizing in Chrome. */
+  /* See: https://bugs.chromium.org/p/chromium/issues/detail?id=428044 */
+  min-height: 17em;
+}
+
+.progress-bar {
+  text-indent: 0.25rem;
+}

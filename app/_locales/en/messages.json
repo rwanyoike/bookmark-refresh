@@ -4,11 +4,11 @@
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "Update your 💼 bookmarks with website descriptions.",
-    "description": "The descriptions of the application"
+    "message": "Update your bookmarks with website descriptions.",
+    "description": "The description of the application"
   },
   "startWarning": {
-    "message": "Remember to always make a backup ⛑.",
+    "message": "Remember to backup your bookmarks.",
     "description": "The start warning message"
   },
   "btnStartAction": {
@@ -20,26 +20,46 @@
     "description": "The stop action button"
   },
   "optAppendDesc": {
-    "message": "Append website description <meta/> to title",
+    "message": "Append website description to the title: <code>Google</code> → <code>Google (Search the world's information...)</code>",
     "description": "The options append checkbox"
   },
-  "bookmarksFound": {
-    "message": "$FOUND$ bookmarks found",
-    "description": "The bookmarks found label",
+  "nodesUpdated": {
+    "message": "$NUM$ bookmarks updated",
+    "description": "The bookmarks updated label",
     "placeholders": {
-      "found": {
+      "num": {
         "content": "$1",
-        "example": "66"
+        "example": "12"
       }
     }
   },
-  "bookmarksSaved": {
-    "message": "$SAVED$ updated",
-    "description": "The bookmarks saved label",
+  "nodesOk": {
+    "message": "$NUM$ bookmarks up to date",
+    "description": "The bookmarks up-to-date label",
     "placeholders": {
-      "saved": {
+      "num": {
         "content": "$1",
-        "example": "42"
+        "example": "12"
+      }
+    }
+  },
+  "nodesFailed": {
+    "message": "$NUM$ bookmarks failed",
+    "description": "The bookmarks failed label",
+    "placeholders": {
+      "num": {
+        "content": "$1",
+        "example": "12"
+      }
+    }
+  },
+  "nodesSkipped": {
+    "message": "$NUM$ bookmarks skipped",
+    "description": "The bookmarks skipped label",
+    "placeholders": {
+      "num": {
+        "content": "$1",
+        "example": "12"
       }
     }
   }

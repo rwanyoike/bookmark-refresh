@@ -13,7 +13,9 @@
   "background": {
     "scripts": [
       "scripts/chromereload.js",
-      "scripts/browser-polyfill.js",
+      "vendor/webextension-polyfill/dist/browser-polyfill.js",
+      "scripts/common/app.js",
+      "scripts/common/utils.js",
       "scripts/background.js"
     ],
     "persistent": false

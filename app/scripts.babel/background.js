@@ -1,182 +1,130 @@
-'use strict';
-
-// First come, first served
-const metaSelectors = [
-  'meta[name="description"]', // 1. Meta
-  'meta[itemprop="description"]', // 2. Google+ / Schema.org
-  'meta[property="og:description"]', // 3. Facebook Open Graph
-  'meta[name="twitter:description"]', // 4. Twitter Cards
-];
-
-// Elements are shared with popup.js
-const popup = null;
-
-// Our very own "state object"
-const state = {
-  bookmarks: [],
+const STATE = {
+  isRunning: false,
+  isPending: false,
   nodeQueue: [],
-  running: false,
-  pending: false,
+  nodes: [],
+  nodesUpdated: 0,
+  nodesOk: 0,
+  nodesFailed: 0,
+  nodesSkipped: 0,
 };
 
-let optAppendDesc = null;
+let portFromBA;
 
-function cleanTextContent(text) {
-  // Match any whitespace character (equal to [\r\n\t\f\v ])
-  return text.replace(/\s{2,}/g, ' ').trim();
-}
-
-function saveBookmarkNode(node, page) {
-  const html = new DOMParser().parseFromString(page, 'text/html');
-  const elTitle = html.querySelector('title');
-
-  if (!elTitle) {
-    console.warn('Missing or empty <title/>:', node.id, node.url);
-    return;
-  }
-  let title = cleanTextContent(elTitle.textContent);
-  if (!title) {
-    console.warn('Missing or empty <title/>:', node.id, node.url);
-    return;
-  }
-
-  if (optAppendDesc) {
-    for (let i = 0; i < metaSelectors.length; i += 1) {
-      const el = html.querySelector(metaSelectors[i]);
-      if (el) {
-        const description = cleanTextContent(el.content);
-        if (description) {
-          title = `${title} (${description})`;
-          break;
-        }
+function saveBookmarkNode(opts, node, text) {
+  const doc = new DOMParser().parseFromString(text, 'text/html');
+  let title = extractPageTitle(doc); // eslint-disable-line no-undef
+  if (title) {
+    if (opts[OPT_APPEND_DESC]) { // eslint-disable-line no-undef
+      // eslint-disable-next-line no-undef
+      const desc = extractPageDesc(doc);
+      if (desc) {
+        title = `${title} (${desc})`;
       }
     }
-  }
-
-  if (node.title === title) {
-    console.warn('Skipped bookmark update:', node.id, node.url);
-    return;
-  }
-  browser.bookmarks.update(node.id, { title }).then(() => {
-    console.info('Updated bookmark:', node.id, node.url);
-  });
-}
-
-function getBookmarkNodes(nodes) {
-  let flattened = [];
-
-  nodes.forEach((node) => {
-    // Return if node is a bookmark
-    if (node.url) {
-      flattened.push(node);
+    if (node.title === title) {
+      STATE.nodesOk += 1;
+    } else {
+      browser.bookmarks.update(node.id, { title }).then(() => {
+        STATE.nodesUpdated += 1;
+      });
     }
-    // Recurse if node is a folder
-    if (node.children) {
-      const n = getBookmarkNodes(node.children);
-      flattened = flattened.concat(n);
-    }
-  });
-
-  return flattened;
+  } else {
+    // Missing or empty <title/> ¯\_(ツ)_/¯
+    STATE.nodesSkipped += 1;
+  }
 }
 
 function updatePopupHtml() {
-  const progress = state.bookmarks.length - state.nodeQueue.length;
-  const progressWidth = (progress / state.bookmarks.length) * 100;
-
-  if (state.running) {
-    // STOP action button
-    popup.elButton.classList.add('btn-danger');
-    popup.elButton.classList.remove('btn-warning');
-    popup.elButton.textContent = browser.i18n.getMessage('btnStopAction');
-  } else if (state.pending) {
-    // STOP action button
-    popup.elButton.disabled = true;
-    popup.elButton.classList.add('btn-danger');
-    popup.elButton.classList.remove('btn-warning');
-    popup.elButton.textContent = browser.i18n.getMessage('btnStopAction');
-  } else {
-    // PLAY action button
-    popup.elButton.disabled = false;
-    popup.elButton.classList.add('btn-warning');
-    popup.elButton.classList.remove('btn-danger');
-    popup.elButton.textContent = browser.i18n.getMessage('btnStartAction');
+  if (portFromBA) {
+    portFromBA.postMessage(STATE);
   }
-
-  popup.elProgressBar.style.width = `${progressWidth}%`;
-  popup.elProgressBar.textContent = `${progress}/${state.bookmarks.length}`;
-  popup.elFound.textContent = browser.i18n.getMessage('bookmarksFound', [
-    state.bookmarks.length,
-  ]);
 }
 
-function loadNextRequest() {
-  if (!state.nodeQueue.length) {
-    state.running = false;
+function loadNextRequest(opts) {
+  if (!STATE.nodeQueue.length) {
+    STATE.isRunning = false;
   }
-
-  if (!state.running) {
-    state.pending = false;
+  if (!STATE.isRunning) {
+    STATE.isPending = false;
     browser.browserAction.setBadgeText({ text: '' });
     updatePopupHtml();
-    return;
+  } else {
+    updatePopupHtml();
+    const node = STATE.nodeQueue.shift();
+    // Skip over non-http(s) urls
+    if (!node.url.startsWith('http')) {
+      STATE.nodesSkipped += 1;
+      loadNextRequest(opts);
+    } else {
+      fetch(node.url)
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.text();
+        })
+        .then((text) => {
+          saveBookmarkNode(opts, node, text);
+        })
+        .catch(() => {
+          STATE.nodesFailed += 1;
+        })
+        .then(() => {
+          loadNextRequest(opts);
+        });
+    }
   }
-
-  updatePopupHtml();
-  const node = state.nodeQueue.shift();
-  // Skip over non-http urls (note startsWith())
-  if (!node.url.startsWith('http')) {
-    loadNextRequest();
-    return;
-  }
-
-  fetch(node.url)
-    .then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.text();
-    })
-    .then((text) => {
-      saveBookmarkNode(node, text);
-      loadNextRequest();
-    })
-    .catch(() => {
-      console.error('Failed HTTP request:', node.id, node.url);
-      loadNextRequest();
-    });
 }
 
 function startStopAction() { // eslint-disable-line no-unused-vars
-  if (state.running) {
-    state.running = false;
-    state.pending = true;
+  if (STATE.isRunning) {
+    STATE.isRunning = false;
+    STATE.isPending = true;
     updatePopupHtml();
-    return;
-  }
-
-  // Load the local settings
-  browser.storage.local.get(['appendDesc']).then((items) => {
-    if (Object.prototype.hasOwnProperty.call(items, 'appendDesc')) {
-      optAppendDesc = items.appendDesc;
-    } else {
-      optAppendDesc = true;
+  } else {
+    browser.browserAction.setBadgeText({ text: '↻' });
+    STATE.isRunning = true;
+    STATE.isPending = false;
+    // Restart the refresh process
+    if (!STATE.nodeQueue.length) {
+      // FIXME: Reload the bookmarks tree
+      STATE.nodeQueue = STATE.nodes.slice();
+      STATE.nodesUpdated = 0;
+      STATE.nodesOk = 0;
+      STATE.nodesFailed = 0;
+      STATE.nodesSkipped = 0;
     }
-  });
-  browser.browserAction.setBadgeText({ text: '↻' });
-  state.running = true;
-  state.pending = false;
-
-  if (!state.nodeQueue.length) {
-    // Restart the process
-    state.nodeQueue = state.bookmarks.slice();
+    // eslint-disable-next-line no-undef
+    browser.storage.local.get([OPT_APPEND_DESC]).then((items) => {
+      loadNextRequest(items);
+    });
   }
-
-  loadNextRequest();
 }
+
+// Fired when a connection is made from popup.js
+browser.runtime.onConnect.addListener((port) => {
+  portFromBA = port;
+  portFromBA.onMessage.addListener(() => {
+    startStopAction();
+  });
+  port.onDisconnect.addListener(() => {
+    portFromBA = null;
+  });
+  updatePopupHtml();
+});
+
+// Fired when the extension is first installed
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    // eslint-disable-next-line no-undef
+    browser.storage.local.set({ [OPT_APPEND_DESC]: true });
+  }
+});
 
 // Load the entire bookmarks tree
 browser.bookmarks.getTree().then((nodes) => {
-  state.bookmarks = getBookmarkNodes(nodes);
-  state.nodeQueue = state.bookmarks.slice();
+  // eslint-disable-next-line no-undef
+  STATE.nodes = getBookmarkNodes(nodes);
+  STATE.nodeQueue = STATE.nodes.slice();
 });

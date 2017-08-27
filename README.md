@@ -2,11 +2,13 @@
 
 > Update your bookmarks.
 
-**Bookmark Refresh** allows you to **overwrite** your bookmarks [with website descriptions](#options). This is useful when doing searches or using the address bar -- typing part of a website's description recommends the bookmark.
+**Bookmark Refresh** lets you to update your bookmarks [with website descriptions](#options). This is useful when using the address bar -- typing a part of a website's description recommends the bookmark.
 
 Tested on Chrome 57+ and Firefox 51+.
 
-![](screenshot.png)
+![](screenshot-ff.png)
+
+![](screenshot-ch.png)
 
 Icon created by [IconDots](https://thenounproject.com/IconDots/) from the [Noun Project](https://thenounproject.com).
 
@@ -16,9 +18,7 @@ To install **Bookmark Refresh**, download the [latest release](https://github.co
 
 ## Usage
 
-**Remember to make a backup of your bookmarks!**
-
-Open the extension and click **Start**. It will proceed to load your bookmarks and start the update.
+**Remember to backup your bookmarks!** Open the extension and click **Start**. It will proceed to load your bookmarks and update them.
 
 For example, a bookmark pointing to this page:
 
@@ -35,13 +35,17 @@ For example, a bookmark pointing to this page:
 ...
 ```
 
-Will have its title set to: _GoatGoatYo_.
+Will have its title set to:
+
+> GoatGoatYo
 
 ### Options
 
-#### Append website description <meta/> to title (default: True)
+#### Append website description to title
 
-When set, the above title becomes: _GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us! 🐐)_.
+When set (default: True), the above title becomes:
+
+> GoatGoatYo (GoatGoatYo is the search engine that tracks you. We don't protect your search history from anyone – even us! 🐐)
 
 Descriptions are found in this order:
 
