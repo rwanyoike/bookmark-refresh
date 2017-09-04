@@ -6,11 +6,19 @@
 
 Tested on Chrome 57+ and Firefox 51+.
 
-![](screenshot-ff.png)
+![](screenshot.png)
 
-![](screenshot-ch.png)
+Icon created by [IconDots](https://thenounproject.com/IconDots/) from the Noun Project.
 
-Icon created by [IconDots](https://thenounproject.com/IconDots/) from the [Noun Project](https://thenounproject.com).
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  * [Options](#options)
+    + [Append website description to the title](#append-website-description-to-the-title)
+- [Maintainers](#maintainers)
+- [Contribute](#contribute)
+- [License](#license)
 
 ## Installation
 
@@ -41,7 +49,7 @@ Will have its title set to:
 
 ### Options
 
-#### Append website description to title
+#### Append website description to the title
 
 When set (default: True), the above title becomes:
 
